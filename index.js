@@ -1,6 +1,6 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
-const writeFile = require('./utils/generateFile')
+const writeFile = require('./utils/generatefile.js')
 const utils = require('./utils/generateMarkdown.js');
 
 // TODO: Create an array of questions for user input
@@ -8,6 +8,21 @@ const questions = [];
 
 const promptUser = () => {
     return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'link',
+            message: 'Enter the link for the deployed project. (Required)',
+            validate: linkInput => {
+                if (linkInput) {
+                    return true;
+                }
+
+                else {
+                    console.log('Please enter the link for the deployed project!');
+                    return false;
+                }
+            }
+        },
         {
             type: 'input',
             name: 'title',
@@ -25,7 +40,7 @@ const promptUser = () => {
 
         {
             type: 'input',
-            name: 'discription',
+            name: 'description',
             message: 'Enter a description of your project: (required)',
             validate: discriptionInput => {
                 if (discriptionInput) {
@@ -39,9 +54,9 @@ const promptUser = () => {
 
         {
             type: 'checkbox',
-            name: 'contents',
-            message: 'Select the Headers you would like to include: (Check all that apply)',
-            choices: ['Installation', 'Usage', 'License', 'Contributing', 'Tests', 'Questions']
+            name: 'languages',
+            message: 'What languages did you build this project with? (Check all that apply)',
+            choices: ['JavaScript', 'HTML', "CSS", 'jQuery', 'Bootstrap', 'Node'],
         },
 
         {
@@ -71,7 +86,7 @@ const promptUser = () => {
                 'BSL-1.0',
                 'Unlicense'
             ],
-            default:'none'
+            default: 'none'
         },
 
         {
@@ -109,11 +124,11 @@ const promptUser = () => {
 };
 
 promptUser()
-    .then(readmeData =>{
+    .then(readmeData => {
         return utils(readmeData);
     })
     .then(pageInfo => {
-        return fs.writeFile(pageInfo);
+        return writeFile(pageInfo);
     })
     .then(writeFileResponse => {
         console.log(writeFileResponse);
