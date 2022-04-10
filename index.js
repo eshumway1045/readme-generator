@@ -1,7 +1,7 @@
 // TODO: Include packages needed for this application
 const fs = require('fs');
 const inquirer = require('inquirer');
-const generatePage = require('./src/page-template');
+const generatePage = require('./utils/generateMarkdown.js');
 
 // TODO: Create an array of questions for user input
 const questions = [];
@@ -57,9 +57,21 @@ const promptUser = () => {
         },
 
         {
-            type: 'input',
+            type: 'list',
             name: 'license',
-            message: 'Please provide licensing information: '
+            message: 'Choose a license for applicaton:',
+            choices: [
+                'none',
+                'AGPL-3.0',
+                'GPL-3.0',
+                'LGPL-3.0',
+                'MPL-2.0',
+                'Apache-2.0',
+                'MIT',
+                'BSL-1.0',
+                'Unlicense'
+            ],
+            default:'none'
         },
 
         {
@@ -76,8 +88,17 @@ const promptUser = () => {
 
         {
             type: 'input',
-            name: 'questions',
-            message: 'Enter your GitHub username for people with questions:'
+            name: 'github',
+            message: 'Enter your GitHub username for people with questions: (Required)',
+            validate: githuibInput => {
+                if (githuibInput) {
+                    return true;
+                }
+                else {
+                    console.log('Please enter your GitHub Username!');
+                    return false;
+                }
+            }
         }
 
 
@@ -88,7 +109,18 @@ const promptUser = () => {
 };
 
 promptUser()
-    .then(answers => console.log(answers));
+    .then(readmeData =>{
+        return utils(readmeData);
+    })
+    .then(pageInfo => {
+        return fs.writeFile(pageInfo);
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse);
+    })
+    .catch(err => {
+        console.log(err);
+    });
 
 
 
