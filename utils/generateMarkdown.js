@@ -60,17 +60,24 @@ module.exports = data => {
 
   return `
       
-    # ${data.title}\n
+  # ${data.title}\n
     ${renderLicenseBadge(data.license)}
-    ## ${data.link}
-    ## ${data.description}\n
-    ## Table of Contents
+  ## Table of Contents
+    \n* [Description](#Description)
     \n* [Installation](#Installation)
     \n* [Usage](#Usage)
     \n* [License](#License)
     \n* [Contributors](#Contributors)
     \n* [Tests](#Tests)
     \n* [Questions](#Questions)\n
+
+    ## Description
+    -------------------------------------------------------
+    ${data.description}\n
+
+    ## Distributed Link
+    -------------------------------------------------------
+    ${data.link}\n
 
     ## Installation
     -------------------------------------------------------
